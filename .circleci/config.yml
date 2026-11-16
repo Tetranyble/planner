@@ -1,0 +1,127 @@
+version: 2.1
+
+jobs:
+  php-mysql-tests:
+    docker:
+      - image: cimg/php:8.4-node
+      - image: mysql:8.0
+        environment:
+          MYSQL_DATABASE: planner_testing
+          MYSQL_USER: planner_test
+          MYSQL_PASSWORD: planner_ci_only_password
+          MYSQL_ROOT_PASSWORD: mysql_ci_root_password
+    environment:
+      APP_ENV: testing
+      APP_DEBUG: 'true'
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: '3306'
+      DB_DATABASE: planner_testing
+      DB_USERNAME: planner_test
+      DB_PASSWORD: planner_ci_only_password
+      DB_URL: ''
+      CACHE_STORE: array
+      SESSION_DRIVER: array
+      QUEUE_CONNECTION: sync
+      MAIL_MAILER: array
+      TELESCOPE_ENABLED: 'false'
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - composer-v1-{{ checksum "composer.lock" }}
+            - composer-v1-
+      - run:
+          name: Install PHP dependencies
+          command: composer install --no-interaction --prefer-dist --optimize-autoloader
+      - save_cache:
+          key: composer-v1-{{ checksum "composer.lock" }}
+          paths:
+            - vendor
+      - run:
+          name: Wait for MySQL
+          command: |
+            for attempt in $(seq 1 30); do
+              php -r 'new PDO("mysql:host=127.0.0.1;port=3306;dbname=planner_testing", "planner_test", "planner_ci_only_password");' && exit 0
+              sleep 2
+            done
+            exit 1
+      - run:
+          name: Prepare isolated test app
+          command: |
+            cp .env.testing.example .env.testing
+            php artisan key:generate --env=testing --force
+            php scripts/assert_safe_test_database.php
+      - run:
+          name: Verify migrations, rollback, and re-apply
+          command: |
+            php artisan migrate:fresh --env=testing --force
+            php artisan migrate:rollback --env=testing --step=1 --force
+            php artisan migrate --env=testing --force
+      - run:
+          name: Repository boundary and standalone checks
+          command: |
+            php scripts/check_repository_boundaries.php
+            php scripts/verify_brand_scope.php
+            php scripts/check_test_fixture_contracts.php
+            php scripts/check_kinship_catalog.php
+            python3 scripts/check_migration_structure.py
+            php tests/Standalone/private_creative_preview_contract.php
+            php tests/Standalone/creative_handoff_fingerprint.php
+      - run:
+          name: Recovery tooling safety tests
+          command: python3 -m unittest discover -s tests/Recovery -v
+      - run:
+          name: Unit suite
+          command: bash scripts/run_mysql_tests.sh Unit
+      - run:
+          name: Feature suite
+          command: bash scripts/run_mysql_tests.sh Feature
+      - run:
+          name: MySQL integration suite
+          command: bash scripts/run_mysql_tests.sh Integration
+
+  frontend-build:
+    docker:
+      - image: cimg/node:22
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - npm-v1-{{ checksum "package-lock.json" }}
+            - npm-v1-
+      - run:
+          name: Install JavaScript dependencies
+          command: npm ci
+      - save_cache:
+          key: npm-v1-{{ checksum "package-lock.json" }}
+          paths:
+            - ~/.npm
+      - run:
+          name: Run frontend regression suite
+          command: |
+            npm run test:theme
+            npm run test:onboarding-ui
+            npm run test:membership-ui
+            npm run test:brand-membership-ui
+            npm run test:controllers
+            npm run test:brand-strategy-ui
+            npm run test:social-architecture
+            npm run test:social-token-lifecycle
+            npm run test:privacy-architecture
+            npm run test:meta-retention-architecture
+            npm run test:grant-revocation
+            npm run test:grant-reconciliation
+            npm run test:content-studio
+            npm run test:content-approvals
+            node --test tests/Frontend/planner-mcp-architecture.test.mjs tests/Frontend/planner-alert-monitoring.test.mjs
+            node --test tests/Frontend/*.test.mjs
+      - run:
+          name: Build frontend assets
+          command: npm run build
+
+workflows:
+  quality-gates:
+    jobs:
+      - php-mysql-tests
+      - frontend-build
