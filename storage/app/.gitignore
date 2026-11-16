@@ -1,0 +1,7 @@
+*
+!private/
+!/private/seeders/*
+!public/
+!/public/*
+!/public/media/images/*
+!.gitignore

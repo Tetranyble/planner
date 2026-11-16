@@ -1,0 +1,27 @@
+name: Dependency security and read-only integration guard
+on:
+  pull_request:
+  push:
+    branches: [main, develop]
+  schedule:
+    - cron: '0 4 * * 1'
+jobs:
+  dependency-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: intl, mbstring, dom, xml, xmlwriter, pdo_mysql
+          coverage: none
+      - name: Check locked PHP dependencies for known advisories
+        run: composer audit --locked --no-interaction
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Check production JS dependencies for high severity advisories
+        run: npm audit --omit=dev --audit-level=high
+      - name: Verify external token / UTCP static safety checks
+        run: node --test tests/Frontend/planner-integrations-architecture.test.mjs tests/Frontend/planner-mcp-architecture.test.mjs tests/Frontend/planner-alert-monitoring.test.mjs

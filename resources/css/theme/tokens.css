@@ -1,0 +1,158 @@
+/*
+ * Planner design tokens — provisional Pensuh palette, 2026-11-14.
+ * Reference: Pensuh B2B Website Blueprint (06 Nov 2026), Section 6.
+ * That document calls these colours SUGGESTED and requires brand approval.
+ * The actual pensuh.com Next.js globals.css was not available in this review.
+ * When the source is provided, change the values here; components use semantic roles.
+ *
+ * Layers: primitives (immutable colors) -> semantic roles -> Tailwind @theme aliases.
+ * Never put per-brand hard-coded hex values in React feature components.
+ */
+
+:root {
+    /* Pensuh draft primitives, not verified against the deployed marketing site */
+    --brand-violet-500: #6948d7;
+    --brand-violet-100: #f2eeff;
+    --brand-navy-950: #111827;
+    --brand-mist-50: #f7f8fc;
+    --brand-neutral-200: #e6e9f1;
+    --brand-slate-500: #64748b;
+    --brand-blue-500: #3b82f6;
+
+    /* Semantic colour roles — light */
+    --background: var(--brand-mist-50);
+    --foreground: var(--brand-navy-950);
+    --card: #ffffff;
+    --card-foreground: var(--brand-navy-950);
+    --popover: #ffffff;
+    --popover-foreground: var(--brand-navy-950);
+    --primary: var(--brand-violet-500);
+    --primary-foreground: #ffffff;
+    --secondary: var(--brand-violet-100);
+    --secondary-foreground: #39217f;
+    --muted: #eef1f6;
+    --muted-foreground: #526177;
+    --accent: var(--brand-violet-100);
+    --accent-foreground: #39217f;
+    --destructive: #b42336;
+    --destructive-foreground: #ffffff;
+    --success: #147d55;
+    --success-foreground: #ffffff;
+    --warning: #925d06;
+    --warning-foreground: #ffffff;
+    --info: #2859a8;
+    --info-foreground: #ffffff;
+    --border: var(--brand-neutral-200);
+    --input: #c4cbda;
+    --ring: var(--brand-violet-500);
+    --link: #5534c2;
+    --brand-soft: var(--brand-violet-100);
+    --on-brand-soft: #39217f;
+    --surface-raised: #ffffff;
+    --surface-sunken: #eff1f8;
+    --overlay: rgb(17 24 39 / 62%);
+
+    /* Charts: accessible, distinguishable categorical colours */
+    --chart-1: #6948d7;
+    --chart-2: #2272ba;
+    --chart-3: #13835f;
+    --chart-4: #bd6b1c;
+    --chart-5: #ad3b77;
+
+    /* Navigation surface */
+    --sidebar: #ffffff;
+    --sidebar-foreground: var(--brand-navy-950);
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: var(--brand-violet-100);
+    --sidebar-accent-foreground: #39217f;
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--ring);
+
+    /* Shape and layout */
+    --radius: 0.875rem;
+    --radius-control: 0.625rem;
+    --radius-card: 1rem;
+    --control-height-sm: 2rem;
+    --control-height-md: 2.5rem;
+    --control-height-lg: 2.75rem;
+    --layout-max-width: 80rem;
+    --layout-gutter: clamp(1rem, 3vw, 2rem);
+
+    /* Typography; Geist is already bundled in Planner, no remote font needed. */
+    --font-ui: 'Geist Variable', 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-code: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --type-xs: 0.75rem;
+    --type-sm: 0.875rem;
+    --type-base: 1rem;
+    --type-lg: 1.125rem;
+    --type-xl: 1.25rem;
+    --type-2xl: 1.5rem;
+    --type-3xl: 1.875rem;
+    --leading-body: 1.6;
+    --leading-heading: 1.2;
+
+    /* Elevation and motion */
+    --elevation-card: 0 1px 2px rgb(17 24 39 / 4%), 0 6px 18px rgb(17 24 39 / 4%);
+    --elevation-popover: 0 10px 35px rgb(17 24 39 / 12%);
+    --duration-fast: 120ms;
+    --duration-normal: 180ms;
+    --easing-standard: cubic-bezier(0.2, 0, 0, 1);
+}
+
+:root.dark {
+    color-scheme: dark;
+    --background: #0b1020;
+    --foreground: #f6f7fb;
+    --card: #161b2e;
+    --card-foreground: #f6f7fb;
+    --popover: #1b2135;
+    --popover-foreground: #f6f7fb;
+    --primary: #a892ff;
+    --primary-foreground: #151026;
+    --secondary: #252241;
+    --secondary-foreground: #ede7ff;
+    --muted: #242b3d;
+    --muted-foreground: #b2bdd0;
+    --accent: #30294f;
+    --accent-foreground: #eae4ff;
+    --destructive: #fa8998;
+    --destructive-foreground: #24090f;
+    --success: #5cdaa2;
+    --success-foreground: #07271a;
+    --warning: #f4c16a;
+    --warning-foreground: #302004;
+    --info: #92bfff;
+    --info-foreground: #0c2046;
+    --border: #333b50;
+    --input: #4a5670;
+    --ring: #b6a3ff;
+    --link: #b6a3ff;
+    --brand-soft: #2e264d;
+    --on-brand-soft: #eae4ff;
+    --surface-raised: #20283c;
+    --surface-sunken: #080d19;
+    --overlay: rgb(0 0 0 / 70%);
+    --chart-1: #a892ff;
+    --chart-2: #70b5f9;
+    --chart-3: #5cdaa2;
+    --chart-4: #f4c16a;
+    --chart-5: #f79fc8;
+    --sidebar: #13192b;
+    --sidebar-foreground: #f6f7fb;
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: #2e264d;
+    --sidebar-accent-foreground: #eae4ff;
+    --sidebar-border: var(--border);
+    --sidebar-ring: var(--ring);
+    --elevation-card: 0 1px 2px rgb(0 0 0 / 15%), 0 6px 18px rgb(0 0 0 / 12%);
+    --elevation-popover: 0 10px 35px rgb(0 0 0 / 35%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --duration-fast: 0ms;
+        --duration-normal: 0ms;
+    }
+}

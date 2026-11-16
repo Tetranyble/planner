@@ -1,0 +1,115 @@
+name: Planner quality gates
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+
+jobs:
+  php-mysql-tests:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: planner_testing
+          MYSQL_USER: planner_test
+          MYSQL_PASSWORD: planner_ci_only_password
+          MYSQL_ROOT_PASSWORD: mysql_ci_root_password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=12
+    env:
+      APP_ENV: testing
+      APP_DEBUG: 'true'
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: '3306'
+      DB_DATABASE: planner_testing
+      DB_USERNAME: planner_test
+      DB_PASSWORD: planner_ci_only_password
+      CACHE_STORE: array
+      SESSION_DRIVER: array
+      QUEUE_CONNECTION: sync
+      MAIL_MAILER: array
+      TELESCOPE_ENABLED: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: intl, mbstring, dom, xml, xmlwriter, pdo_mysql, zip, fileinfo
+          coverage: none
+      - uses: ramsey/composer-install@v3
+        with:
+          dependency-versions: locked
+      - name: Prepare isolated test app
+        run: |
+          cp .env.testing.example .env.testing
+          php artisan key:generate --env=testing --force
+          php scripts/assert_safe_test_database.php
+      - name: Verify migrations, rollback and re-apply
+        run: |
+          php artisan migrate:fresh --env=testing --force
+          php artisan migrate:rollback --env=testing --step=1 --force
+          php artisan migrate --env=testing --force
+      - name: Repository boundary and standalone checks
+        run: |
+          php scripts/check_repository_boundaries.php
+          php scripts/verify_brand_scope.php
+          php scripts/check_test_fixture_contracts.php
+          php scripts/check_kinship_catalog.php
+          python3 scripts/check_migration_structure.py
+          php tests/Standalone/private_creative_preview_contract.php
+          php tests/Standalone/creative_handoff_fingerprint.php
+      - name: Recovery tooling safety tests
+        run: python3 -m unittest discover -s tests/Recovery -v
+      - name: Unit suite (separate bounded PHP process)
+        run: bash scripts/run_mysql_tests.sh Unit
+      - name: Feature suite (separate bounded PHP process)
+        run: bash scripts/run_mysql_tests.sh Feature
+      - name: MySQL integration suite (separate bounded PHP process)
+        run: bash scripts/run_mysql_tests.sh Integration
+
+  frontend-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Verify semantic theme and appearance settings
+        run: npm run test:theme
+      - name: Verify onboarding frontend contracts
+        run: npm run test:onboarding-ui
+      - name: Verify membership and invitation frontend contracts
+        run: npm run test:membership-ui
+      - name: Verify brand membership UI
+        run: npm run test:brand-membership-ui
+      - name: Enforce resource and invokable controller conventions
+        run: npm run test:controllers
+      - name: Verify brand strategy UI
+        run: npm run test:brand-strategy-ui
+      - name: Verify social connections UI and route contracts
+        run: npm run test:social-architecture
+      - name: Verify social credential lifecycle
+        run: npm run test:social-token-lifecycle
+      - run: npm run test:privacy-architecture
+      - run: npm run test:meta-retention-architecture
+      - run: npm run test:grant-revocation
+      - run: npm run test:grant-reconciliation
+      - name: Verify content studio architecture and permissions
+        run: npm run test:content-studio
+      - name: Verify version-bound content approvals and governance
+        run: npm run test:content-approvals
+      - name: Verify scoped MCP server and AI evidence contracts
+        run: node --test tests/Frontend/planner-mcp-architecture.test.mjs tests/Frontend/planner-alert-monitoring.test.mjs
+      - name: Run complete frontend regression suite
+        run: node --test tests/Frontend/*.test.mjs
+      - run: npm run build

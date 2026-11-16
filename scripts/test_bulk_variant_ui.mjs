@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const root=new URL('../',import.meta.url);
+const show=fs.readFileSync(new URL('resources/js/Pages/Organisations/Brands/Content/Show.jsx',root),'utf8');
+const api=fs.readFileSync(new URL('routes/api.php',root),'utf8');
+const web=fs.readFileSync(new URL('routes/web.php',root),'utf8');
+assert.match(show,/Multi-platform variants/);
+assert.match(show,/targets\/bulk/);
+assert.match(show,/captionLimits/);
+assert.match(show,/Save all platform variants/);
+assert.match(api,/BulkContentTargetsController/);
+assert.match(web,/BulkContentTargetsController/);
+console.log('6/6 bulk content variant structural assertions passed');

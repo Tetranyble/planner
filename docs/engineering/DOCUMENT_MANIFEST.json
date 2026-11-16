@@ -1,0 +1,101 @@
+{
+  "snapshot_date": "2026-11-14",
+  "task_count": 70,
+  "test_scenario_count": 84,
+  "status": "phase1_owner_brand_creation_implemented_runtime_unverified_phase0_open",
+  "files": {
+    "AGENTS.md": {
+      "sha256": "313a777117318751e0b505118fb3f369f22d2d45bc85d6b4b4936fd3335e56cf",
+      "bytes": 9200
+    },
+    "CONTINUE_HERE.md": {
+      "sha256": "47eeed99c36443603e161b8d141ace465d1e40184177a7d80b4ec1cf788b55be",
+      "bytes": 10283
+    },
+    "README.md": {
+      "sha256": "a85945c6e3c35e9c90da583b0c705fe68b4ebcc2c249df9481020b1fb542fdb4",
+      "bytes": 4493
+    },
+    "docs/IMPLEMENTATION_FIXES_2026-11-14.md": {
+      "sha256": "979d50133cbd85e431190a141931a8a80242578fd8423ecaf7bdd8801cf422d0",
+      "bytes": 7381
+    },
+    "docs/INTEGRATION_STATUS.md": {
+      "sha256": "456fe016661bbb84e38fb92c3495c64decf606a8086b6b3c527ea88e11cab84d",
+      "bytes": 910
+    },
+    "docs/engineering/00_START_HERE.md": {
+      "sha256": "c21041096f8483ab849733f4fac26608fa94d243e25f5348ddbe146559142b6e",
+      "bytes": 5499
+    },
+    "docs/engineering/01_ARCHITECTURE_AND_BOUNDARIES.md": {
+      "sha256": "2a2437fe25a6f86abb61b1ffa96ae407a1f0fbb79efb3ea4f781cfdd053c1404",
+      "bytes": 5460
+    },
+    "docs/engineering/02_REPOSITORY_PATTERN.md": {
+      "sha256": "8325030b5a580eb161ac1a06519d31f272ea815bbd24e82d95169d653c7f29a1",
+      "bytes": 8246
+    },
+    "docs/engineering/03_QUALITY_AND_TESTING.md": {
+      "sha256": "26dfcb198f9d6213b92e3bd4ad31e3ffb5970de3188e423e357c0b75c7d0c8d9",
+      "bytes": 7039
+    },
+    "docs/engineering/04_MASTER_IMPLEMENTATION_ROADMAP.md": {
+      "sha256": "a62225d9ec6ef1ff443fe68b26864eaf50b4f93e170f077d9dc235bd5712a4d9",
+      "bytes": 18972
+    },
+    "docs/engineering/05_SECURITY_AND_DATA_INTEGRITY.md": {
+      "sha256": "bb8e2732b734883d2beeb2f58b806b33b32c034845152814c124440262d170a2",
+      "bytes": 4681
+    },
+    "docs/engineering/06_API_AI_AND_PROTOCOLS.md": {
+      "sha256": "8215a7a25d3a8d9f3e60ea56a95ef040f108728ad100edfd1bee1708b8aaa83c",
+      "bytes": 5300
+    },
+    "docs/engineering/07_DEPLOYMENT_AND_OPERATIONS.md": {
+      "sha256": "d5beda898571fd831966394d8107fe4c07d42da66ce95d884aec0aebb03046bb",
+      "bytes": 5547
+    },
+    "docs/engineering/08_DECISIONS_RISKS_AND_OPEN_QUESTIONS.md": {
+      "sha256": "6056ad25a604fbcf7f8c9a183edafec19394eb230dbe4dcd87707ab109a15048",
+      "bytes": 5663
+    },
+    "docs/engineering/09_HANDOFF_AND_PROGRESS.md": {
+      "sha256": "d2b366ca2077df8c6b3c084e0c47d91af4870eeb22ece7b5410f47a303152f4a",
+      "bytes": 9679
+    },
+    "docs/engineering/10_PRODUCT_UI_AND_USER_JOURNEYS.md": {
+      "sha256": "9ebd57e1165b4cb4c58517364ae18f5cb4d75ae8c94289f841e2028e6ab0d453",
+      "bytes": 6053
+    },
+    "docs/engineering/11_DOMAIN_LIFECYCLES.md": {
+      "sha256": "bbd6f1dcc5694bb3c166ea0f6d52ee9e46336830e13d4dfee42c3cd070b0c7d2",
+      "bytes": 3936
+    },
+    "docs/engineering/12_FEATURE_TICKET_TEMPLATE.md": {
+      "sha256": "8438066d7405f43a0656c3965cb5c1b3a83ae7a318929d10a29e0619e8524768",
+      "bytes": 2010
+    },
+    "docs/engineering/PHASE_TRACKER.csv": {
+      "sha256": "bcecbeca45fc039903d45720a16aaa6a7ddfe7118731314b50a91abdda713161",
+      "bytes": 17852
+    },
+    "docs/engineering/TEST_MATRIX.csv": {
+      "sha256": "1d816ea15bd0875397d52655a31a9e7480003cc4743a90f57b2a79388704d2a6",
+      "bytes": 11978
+    },
+    "docs/engineering/13_PHASE0_REPOSITORY_IMPLEMENTATION_2026-11-14.md": {
+      "sha256": "2651595af9e0b0a1ae405735e2fd0df4c86aa5e54eecd744513d663eedb2fe28",
+      "bytes": 6841
+    },
+    "docs/engineering/16_PHASE1_ONBOARDING_AND_BRAND_CREATION_2026-11-14.md": {
+      "sha256": "9c0b5710fff39fc9fff5dc0a9df314a6419c30188034f0a43fb9a01848ad7577",
+      "bytes": 9697
+    },
+    "RELEASE_NOTES_PHASE1_ONBOARDING_2026-11-14.md": {
+      "sha256": "2e41a34ff8a50e1edc32179c96c52cb48f8d2b1e96342d5c86fbfaec7baf6ebf",
+      "bytes": 1109
+    }
+  },
+  "source_baseline": "User-provided Planner(1).zip"
+}
